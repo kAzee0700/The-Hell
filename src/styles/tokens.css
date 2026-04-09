@@ -1,0 +1,26 @@
+:root {
+  --color-bg: #0f0f14;
+  --color-surface: #16161d;
+  --color-border: #2a2a35;
+  --color-text: #f3f3f6;
+  --color-text-muted: #a3a3b2;
+  --color-accent: #ff5a36;
+
+  --font-body: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-3: 0.75rem;
+  --radius-4: 1rem;
+
+  --container-max: 1320px;
+
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+}
