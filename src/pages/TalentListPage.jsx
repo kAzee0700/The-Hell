@@ -53,9 +53,9 @@ export function TalentListPage() {
             <article key={profile.id} className="surface-card talent-card">
               <div className="talent-card__head">
                 <div className="talent-card__title-group">
-                  <p className="talent-card__eyebrow">{profile.title}</p>
-                  <h2>{profile.name}</h2>
+                  <p className="talent-card__eyebrow">원하는 업무 직종</p>
                   <p className="talent-card__role">{profile.desiredRoleLabel}</p>
+                  <h2 className="talent-card__name">{profile.name}</h2>
                 </div>
                 <span className="signal-card__status">{profile.status}</span>
               </div>
