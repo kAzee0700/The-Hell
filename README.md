@@ -1,196 +1,188 @@
 # The Hell
 
-> **사람을 먼저 올리고, 기업이 제안하는 역방향 채용 플랫폼**  
-> 기존의 공고 중심 채용 사이트와 다르게, 구직자가 먼저 자신의 프로필과 방향성을 등록하고 기업이 사람을 탐색해 제안하는 흐름을 설계한 React 기반 웹 프로젝트입니다.
+구직자가 먼저 자신을 등록하고, 기업이 인증 후 인재를 탐색하고 제안하는 구조를 목표로 하는 채용 플랫폼 프로젝트입니다.
 
-<br />
+현재 이 저장소는 다음 두 축으로 구성되어 있습니다.
 
-## 프로젝트 소개
+- React + Vite 기반 프론트엔드
+- Express + Prisma + SQLite 기반 개발용 백엔드
 
-**The Hell**은 일반적인 채용 플랫폼의 구조를 뒤집은 서비스입니다.  
-보통은 기업이 공고를 올리고 구직자가 지원하지만, 이 프로젝트는 **구직자가 먼저 자신을 등록하고 기업이 사람을 탐색하는 구조**를 중심으로 설계했습니다.
+## Project Status
 
-이 프로젝트는 단순히 UI를 만드는 데 그치지 않고,
-- 서비스 컨셉 정의
-- 사용자 흐름 설계
-- 권한 구조 분리
-- 실제 탐색/제안/저장 흐름을 반영한 페이지 구조 설계
-까지 함께 담은 팀 프로젝트형 결과물입니다.
+현재 구현 상태는 다음과 같습니다.
 
-<br />
+- 메인 페이지, 공개 안내 페이지, 가입/로그인 흐름이 존재합니다.
+- 개인 회원가입, 기업 회원가입, 관리자 화면, 열람 이력 화면이 추가되어 있습니다.
+- 백엔드는 인증, 관리자 조회/승인, 열람 이력 조회용 API까지 동작합니다.
+- 인재 검색, 저장, 제안 생성/응답, 기업 인증 완성 흐름은 아직 진행 중입니다.
 
-## 핵심 컨셉
+즉, 이 프로젝트는 완성 배포본보다는 구조와 흐름을 빠르게 검증하는 작업 브랜치에 가깝습니다.
 
-- **공고 중심이 아니라 사람 중심**
-- **구직자가 먼저 프로필을 등록**
-- **기업은 인증 후 인재를 탐색**
-- **조건에 맞는 인재에게 직접 제안**
-- **민감한 정보는 공개 범위와 인증 기준으로 보호**
-
-즉, 이 서비스는 단순한 채용 사이트가 아니라  
-**"발견되고 제안받는 경험"** 을 중심으로 한 역방향 채용 플랫폼입니다.
-
-<br />
-
-## 주요 기능
-
-### 1. 메인 페이지
-- 서비스의 방향성과 차별점을 첫 화면에서 전달
-- 구직자 / 기업 각각의 진입 흐름 제공
-- 최근 제안, 등록 프로필, 탐색 조건 등을 한눈에 확인 가능
-
-### 2. 구직자 프로필 등록
-- 구직자가 자기소개, 희망 직무, 조건, 공개 범위를 설정
-- 단순 이력서가 아닌 **방향성과 가능성 중심의 자기 표현** 구조 반영
-
-### 3. 기업 인증 및 권한 확인
-- 아무나 프로필을 열람하지 못하도록 인증 절차 분리
-- 채용 권한이 있는 기업 사용자만 주요 탐색 기능 접근 가능
-
-### 4. 인재 탐색 / 상세 열람
-- 기업이 조건에 맞는 구직자를 탐색
-- 카드형 목록과 상세 페이지를 통해 프로필 확인
-- 희망 직무, 경력 유형, 상태, 조건 등을 기준으로 판단 가능
-
-### 5. 저장 / 제안 / 제안함 흐름
-- 관심 인재 저장
-- 기업이 직접 제안 전송
-- 구직자가 제안을 확인하고 검토하는 구조 반영
-
-### 6. 운영 정책 / 안전 구조
-- 프라이버시, 공개 범위, 신고/차단, 열람 제한에 대한 기준 제시
-- 민감한 채용 정보가 오가는 서비스라는 점을 고려한 설계
-
-<br />
-
-## 페이지 구성
-
-- `/` : 메인 페이지
-- `/about` : 서비스 소개
-- `/safety` : 운영 정책 및 안전 안내
-- `/profile` : 구직자 프로필 등록/수정
-- `/proposals` : 구직자 제안함
-- `/proposals/:proposalId` : 제안 상세
-- `/company/verify` : 기업 인증
-- `/talents` : 인재 탐색 목록
-- `/talents/:talentId` : 인재 상세
-- `/saved` : 저장한 인재 목록
-- `/offers/create` : 제안 작성
-- `/offers` : 기업 제안 관리
-
-<br />
-
-## 기술 스택
+## Tech Stack
 
 ### Frontend
+
 - React 18
 - React Router DOM 6
 - Vite
+- CSS modules 없이 글로벌 CSS / tokens / reset / utilities 분리
 
-### Styling
-- CSS
-- Design tokens / reset / utilities 분리 구조
+### Backend
 
-### Project Structure
-- Layout 기반 권한 구조 분리
-- Route 중심 페이지 구성
-- docs / rules / agents / logs 문서화 구조 포함
+- Node.js
+- Express
+- Prisma
+- SQLite
+- bcryptjs
+- jsonwebtoken
 
-<br />
+## Directory Structure
 
-## 폴더 구조
-
-```bash
+```text
 The-Hell/
 ├─ src/
+│  ├─ assets/
 │  ├─ components/
 │  ├─ data/
 │  ├─ hooks/
 │  ├─ layouts/
 │  ├─ pages/
 │  ├─ routes/
+│  ├─ services/
 │  ├─ styles/
 │  └─ utils/
+├─ server/
+│  ├─ prisma/
+│  └─ src/
 ├─ docs/
 ├─ rules/
 ├─ agents/
-├─ logs/
-├─ dist/
 ├─ package.json
-└─ vite.config.js
+└─ README.md
 ```
 
-<br />
+## Main Routes
 
-## 프로젝트 포인트
+현재 프론트 라우트 기준 주요 경로는 아래와 같습니다.
 
-이 프로젝트는 단순히 화면 몇 개를 만든 작업이 아니라,
+- `/` 메인 페이지
+- `/login` 로그인
+- `/signup` 가입 유형 선택
+- `/signup/individual` 개인 회원가입
+- `/signup/individual/profile` 개인 프로필 2단계
+- `/signup/company` 기업 회원가입
+- `/signup/company/setup` 기업 인증 2단계
+- `/about` 서비스 소개
+- `/safety` 운영 정책 / 안전 안내
+- `/profile` 구직자 프로필
+- `/visibility` 공개 범위 설정
+- `/proposals` 받은 제안 목록
+- `/proposals/:proposalId` 제안 상세
+- `/view-history` 열람 이력
+- `/company/verify` 기업 인증 안내
+- `/talents` 인재 탐색
+- `/talents/:talentId` 인재 상세
+- `/saved` 저장한 인재
+- `/offers` 기업이 보낸 제안
+- `/offers/new/:talentId` 특정 인재에게 제안 작성
+- `/admin/users` 관리자 사용자 목록
+- `/admin/companies` 관리자 기업 승인 관리
 
-- **기존 채용 서비스와 다른 서비스 구조를 정의했고**
-- **구직자 / 기업 / 공개 권한의 관계를 분리해 설계했으며**
-- **페이지별 역할과 감정 흐름까지 고려해 UX를 정리한 프로젝트**입니다.
+## Backend API
 
-특히 다음 부분을 중점으로 작업했습니다.
+현재 백엔드에서 구현되어 있는 주요 API 범위는 아래와 같습니다.
 
-- 일반 채용공고 플랫폼과 다른 **서비스 구조 기획**
-- 사람 중심 탐색 경험을 보여주는 **UI 흐름 설계**
-- 인증 기업 / 일반 사용자 / 구직자 흐름을 구분한 **레이아웃 구조화**
-- 문서화가 가능한 작업 환경을 위한 **agents / rules / logs 기반 운영 방식 정리**
+### Auth
 
-<br />
+- `POST /api/auth/signup/individual`
+- `POST /api/auth/signup/company`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `POST /api/auth/logout`
 
-## 실행 방법
+### Admin
+
+- `GET /api/admin/users`
+- `GET /api/admin/companies`
+- `PATCH /api/admin/companies/:userId/verify`
+
+### View History
+
+- `GET /api/view-history/my-history`
+
+### Health Check
+
+- `GET /api/health`
+
+## Database
+
+현재 Prisma 스키마에는 아래 모델이 포함되어 있습니다.
+
+- `User`
+- `ViewHistory`
+
+아직 `Offer`, `SavedTalent`, `CompanyVerificationRequest` 같은 도메인 모델은 별도 분리되지 않았고, 이후 백엔드 작업에서 확장될 예정입니다.
+
+## Getting Started
+
+### 1. Frontend
 
 ```bash
 npm install
 npm run dev
 ```
 
-빌드:
+기본 개발 서버:
+
+- `http://localhost:5173`
+
+### 2. Backend
 
 ```bash
-npm run build
+cd server
+npm install
+npm run db:push
+npm run db:seed
+npm run dev
 ```
 
-미리보기:
+기본 API 서버:
+
+- `http://localhost:3001`
+
+헬스 체크:
 
 ```bash
-npm run preview
+http://localhost:3001/api/health
 ```
 
-<br />
+## Seed Accounts
 
-## 아쉬웠던 점 / 개선 방향
+개발용 시드 계정은 아래와 같습니다.
 
-- 실제 백엔드 및 인증 시스템 연동은 아직 포함되지 않음
-- 필터/검색/저장/제안 기능은 현재 프론트 중심 구조 설계 단계
-- 추후에는 API 연동, 실제 데이터 저장, 기업 인증 프로세스, 접근 권한 제어 고도화가 필요
+- Admin: `admin@hell.local` / `admin1234`
+- Individual: `user@hell.local` / `user1234`
+- Company: `company@hell.local` / `company1234`
 
-<br />
+## Notes
 
-## 회고
+- 현재 작업 브랜치에서는 README 외에도 프론트 구조 개편, 관리자 페이지, 인증 흐름, 백엔드 서버 추가 작업이 함께 진행되었습니다.
+- 일부 화면은 아직 스캐폴드 상태이며 실제 API 연결이 완료되지 않았습니다.
+- 열람 이력, 프로필 공개 범위, 기업 인증 흐름은 계속 정리 중입니다.
+- 한글이 깨져 보이던 기존 README는 이번 업데이트에서 현재 상태 기준으로 다시 정리했습니다.
 
-이 프로젝트를 통해 단순한 화면 구현보다 중요한 것이  
-**서비스 구조를 어떻게 정의하고, 그 구조가 페이지에 어떻게 드러나는지 설계하는 일**이라는 점을 많이 느꼈습니다.
+## Next Backend Tasks
 
-특히 기존 서비스 문법을 그대로 가져오지 않고,  
-"사람을 먼저 올리고 기업이 제안한다"는 방향을 끝까지 유지하면서 페이지를 정리한 경험이 이 프로젝트의 가장 큰 의미였습니다.
+다음 백엔드 우선 작업은 아래가 핵심입니다.
 
-<br />
+- 개인 프로필 2단계 저장 API
+- 기업 인증 2단계 저장 및 승인 요청 API
+- 인재 목록 / 상세 조회 API
+- 저장한 인재 API
+- 제안 생성 / 목록 / 상세 / 응답 API
+- 권한 분기 강화
 
-## 배포
+## Author
 
-GitHub Pages 또는 별도 정적 배포 환경에 업로드해 확인할 수 있습니다.  
-배포 링크는 레포 설정 후 아래 위치에 추가하면 됩니다.
-
-```md
-Live Demo: [바로가기](여기에-배포-링크-추가)
-```
-
-<br />
-
-## 작성자
-
-**Yeom Seungho**  
+Yeom Seungho  
 Planning / UX Structure / Frontend Collaboration
-
