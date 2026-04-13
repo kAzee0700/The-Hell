@@ -1,5 +1,6 @@
 export const VIEWER_ACCESS = {
   public: 'public',
+  admin: 'admin',
   jobSeeker: 'jobseeker',
   companyPending: 'company-pending',
   companyVerified: 'company-verified',
@@ -7,6 +8,7 @@ export const VIEWER_ACCESS = {
 
 export const VIEWER_LABELS = {
   [VIEWER_ACCESS.public]: '공개 방문자',
+  [VIEWER_ACCESS.admin]: '관리자',
   [VIEWER_ACCESS.jobSeeker]: '구직자',
   [VIEWER_ACCESS.companyPending]: '기업 인증 전',
   [VIEWER_ACCESS.companyVerified]: '기업 인증 후',

@@ -1,30 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Pill } from '../components/Pill';
 import { getBaseTalentProfiles } from '../data/talentProfiles';
 import { usePageTitle } from '../hooks/usePageTitle';
 import { ROUTE_PATHS } from '../utils/routes';
-
-const visibleProfiles = getBaseTalentProfiles()
-  .slice(0, 6)
-  .map((profile) => ({
-    id: profile.id,
-    name: profile.name,
-    title: profile.title,
-    desiredRole: profile.desiredRoleLabel,
-    career: `${profile.careerType} ${profile.totalCareer}`,
-    intro: profile.cardIntro ?? profile.intro,
-    highlights: profile.highlights.slice(0, 3),
-    condition: profile.conditionLabel,
-    status: profile.status,
-    visibility: profile.visibility,
-  }));
 
 const recentOffers = [
   {
     targetName: '윤가은',
     offerRole: '고객 성공 운영',
     reason: '가능 시점 확인',
-    companyLabel: '인증 기업',
     status: '수락 대기',
     timing: '방금 도착',
   },
@@ -32,7 +15,6 @@ const recentOffers = [
     targetName: '최현우',
     offerRole: '프론트엔드 전환',
     reason: '전환 의지 확인',
-    companyLabel: '인증 기업',
     status: '검토 중',
     timing: '22분 전',
   },
@@ -40,7 +22,6 @@ const recentOffers = [
     targetName: '문지환',
     offerRole: '브랜드 콘텐츠 에디터',
     reason: '글쓰기 경험 확인',
-    companyLabel: '인증 기업',
     status: '신규 도착',
     timing: '오늘 오전',
   },
@@ -48,56 +29,186 @@ const recentOffers = [
     targetName: '송하린',
     offerRole: '콘텐츠 기획 제안',
     reason: '원격 조건 반영',
-    companyLabel: '인증 기업',
     status: '제한 공개',
     timing: '오늘 오전',
   },
 ];
 
-const highlightedOffer = recentOffers[0];
+const heroAlert = recentOffers[0];
 
-const trustPoints = ['인증 기업만 열람', '희망 직무 기준 공개', '수락 전 정보 제한 공개'];
+function getFilterCount(profiles, filterId) {
+  const count = profiles.filter((p) => {
+    if (filterId === 'remote') {
+      return p.workStyle.includes('원격') || p.workStyle.includes('하이브리드');
+    }
+    if (filterId === 'on-site') {
+      return p.workStyle.includes('출근');
+    }
+    if (filterId === 'career') {
+      return p.careerType === '경력';
+    }
+    if (filterId === 'career-change') {
+      return p.careerType.includes('전환');
+    }
+    if (filterId === 'career-return') {
+      return p.careerType.includes('복귀');
+    }
+    if (filterId === 'newcomer') {
+      return p.careerType === '신입' || p.careerType === '무경력' || p.totalCareer === '0년' || p.totalCareer === '1년 미만';
+    }
+    if (filterId === 'engineering') {
+      return p.desiredRoles.some((r) => /IT|개발|웹|프론트엔드|백엔드|엔지니어|기술|게임/.test(r));
+    }
+    if (filterId === 'devops') {
+      return p.desiredRoles.some((r) => /DevOps|인프라|클라우드|시스템|서버|네트워크/.test(r));
+    }
+    if (filterId === 'data-ai') {
+      return p.desiredRoles.some((r) => /데이터|분석|AI|머신러닝|MLOps|사이언스/.test(r));
+    }
+    if (filterId === 'operation') {
+      return p.desiredRoles.some((r) => /운영|기획|매니지먼트|오퍼레이션|프로젝트|품질/.test(r));
+    }
+    if (filterId === 'marketing') {
+      return p.desiredRoles.some((r) => /마케팅|광고|브랜드|스포츠/.test(r));
+    }
+    if (filterId === 'content') {
+      return p.desiredRoles.some((r) => /콘텐츠|에디터|글쓰기|편집|미디어|출판|번역/.test(r));
+    }
+    if (filterId === 'design') {
+      return p.desiredRoles.some((r) => /디자인|UX|UI|크리에이티브|시각/.test(r));
+    }
+    if (filterId === 'customer') {
+      return p.desiredRoles.some((r) => /고객|CS|지원|고객경험|성공/.test(r));
+    }
+    if (filterId === 'data') {
+      return p.desiredRoles.some((r) => /데이터|분석|리서치/.test(r));
+    }
+    if (filterId === 'sales') {
+      return p.desiredRoles.some((r) => /영업|사업|BizDev|파트너/.test(r));
+    }
+    if (filterId === 'admin') {
+      return p.desiredRoles.some((r) => /사무|총무|인사|행정|복리/.test(r));
+    }
+    if (filterId === 'finance') {
+      return p.desiredRoles.some((r) => /재무|회계|금융|자산|투자|IR|펀드/.test(r));
+    }
+    if (filterId === 'legal') {
+      return p.desiredRoles.some((r) => /법무|법률|지적|컴플라이/.test(r));
+    }
+    if (filterId === 'consult') {
+      return p.desiredRoles.some((r) => /컨설팅|전략|경영/.test(r));
+    }
+    if (filterId === 'product') {
+      return p.desiredRoles.some((r) => /프로덕트|서비스|앱/.test(r));
+    }
+    if (filterId === 'hr') {
+      return p.desiredRoles.some((r) => /HRBP|조직|리더십|채용|조직문화/.test(r));
+    }
+    if (filterId === 'edu') {
+      return p.desiredRoles.some((r) => /교육|학원|커리큘럼/.test(r));
+    }
+    if (filterId === 'medical') {
+      return p.desiredRoles.some((r) => /의료|제약|간호|요양|바이오/.test(r));
+    }
+    if (filterId === 'finance-industry') {
+      return p.desiredRoles.some((r) => /은행|보험|카드|WM|핀테크/.test(r));
+    }
+    if (filterId === 'logistics') {
+      return p.desiredRoles.some((r) => /물류|유통|배송|창고/.test(r));
+    }
+    if (filterId === 'manufacturing') {
+      return p.desiredRoles.some((r) => /생산|제조|공장|품질|설비|전기|전자|기계|용접/.test(r));
+    }
+    if (filterId === 'construction') {
+      return p.desiredRoles.some((r) => /건설|부동산|건축|배관|공정/.test(r));
+    }
+    if (filterId === 'agriculture') {
+      return p.desiredRoles.some((r) => /농업|축산|사육/.test(r));
+    }
+    if (filterId === 'beauty') {
+      return p.desiredRoles.some((r) => /미용|헤어|피부|에스테틱|뷰티/.test(r));
+    }
+    if (filterId === 'culinary') {
+      return p.desiredRoles.some((r) => /조리|요리|제빵|베이커리/.test(r));
+    }
+    if (filterId === 'service-field') {
+      return p.desiredRoles.some((r) => /호텔|관광|리조트|세탁|청소/.test(r));
+    }
+    if (filterId === 'automotive') {
+      return p.desiredRoles.some((r) => /자동차|정비/.test(r));
+    }
+    if (filterId === 'hidden') {
+      return p.visibility.includes('제한') || p.visibility.includes('비공개') || p.workStyle.includes('비공개');
+    }
+    return false;
+  }).length;
+  return count > 0 ? String(count) : null;
+}
 
-const featuredThemes = [
-  {
-    label: '원격/하이브리드',
-    title: '출근 부담이 적은 조건',
-    description: '원격 또는 하이브리드 조건을 포함한 프로필을 바로 확인합니다.',
-  },
-  {
-    label: '운영 · 기획',
-    title: '서비스를 굴리는 역할군',
-    description: '운영, 협업 조율, 프로덕트 실행 경험을 가진 인재를 모아봅니다.',
-  },
-  {
-    label: '전환 준비',
-    title: '경력 전환을 준비하는 후보',
-    description: '개인 프로젝트와 전환 의지를 드러낸 프로필만 따로 볼 수 있습니다.',
-  },
-  {
-    label: '빠른 검토',
-    title: '지금 제안 검토 중인 인재',
-    description: '현재 열람 가능 상태와 최근 제안 반응이 있는 후보를 빠르게 살펴봅니다.',
-  },
+const allProfiles = getBaseTalentProfiles();
+
+const quickFilters = [
+  { id: 'remote', label: '원격·하이브리드', count: getFilterCount(allProfiles, 'remote') },
+  { id: 'on-site', label: '출근형', count: getFilterCount(allProfiles, 'on-site') },
+  { id: 'career', label: '경력', count: getFilterCount(allProfiles, 'career') },
+  { id: 'career-change', label: '경력 전환', count: getFilterCount(allProfiles, 'career-change') },
+  { id: 'career-return', label: '복귀 준비', count: getFilterCount(allProfiles, 'career-return') },
+  { id: 'newcomer', label: '신입·무경력', count: getFilterCount(allProfiles, 'newcomer') },
+  { id: 'engineering', label: 'IT·개발', count: getFilterCount(allProfiles, 'engineering') },
+  { id: 'devops', label: 'DevOps·인프라', count: getFilterCount(allProfiles, 'devops') },
+  { id: 'data-ai', label: '데이터·AI', count: getFilterCount(allProfiles, 'data-ai') },
+  { id: 'operation', label: '운영·기획', count: getFilterCount(allProfiles, 'operation') },
+  { id: 'product', label: '프로덕트', count: getFilterCount(allProfiles, 'product') },
+  { id: 'marketing', label: '마케팅', count: getFilterCount(allProfiles, 'marketing') },
+  { id: 'content', label: '콘텐츠', count: getFilterCount(allProfiles, 'content') },
+  { id: 'design', label: '디자인', count: getFilterCount(allProfiles, 'design') },
+  { id: 'customer', label: '고객관리', count: getFilterCount(allProfiles, 'customer') },
+  { id: 'data', label: '데이터', count: getFilterCount(allProfiles, 'data') },
+  { id: 'sales', label: '영업', count: getFilterCount(allProfiles, 'sales') },
+  { id: 'admin', label: '사무·총무', count: getFilterCount(allProfiles, 'admin') },
+  { id: 'hr', label: '인사·HR', count: getFilterCount(allProfiles, 'hr') },
+  { id: 'finance', label: '재무·금융', count: getFilterCount(allProfiles, 'finance') },
+  { id: 'legal', label: '법무', count: getFilterCount(allProfiles, 'legal') },
+  { id: 'consult', label: '컨설팅', count: getFilterCount(allProfiles, 'consult') },
+  { id: 'edu', label: '교육', count: getFilterCount(allProfiles, 'edu') },
+  { id: 'medical', label: '의료·제약', count: getFilterCount(allProfiles, 'medical') },
+  { id: 'finance-industry', label: '금융업', count: getFilterCount(allProfiles, 'finance-industry') },
+  { id: 'logistics', label: '물류·유통', count: getFilterCount(allProfiles, 'logistics') },
+  { id: 'manufacturing', label: '제조·생산', count: getFilterCount(allProfiles, 'manufacturing') },
+  { id: 'construction', label: '건설·부동산', count: getFilterCount(allProfiles, 'construction') },
+  { id: 'agriculture', label: '농축산업', count: getFilterCount(allProfiles, 'agriculture') },
+  { id: 'beauty', label: '미용·뷰티', count: getFilterCount(allProfiles, 'beauty') },
+  { id: 'culinary', label: '요리·제빵', count: getFilterCount(allProfiles, 'culinary') },
+  { id: 'service-field', label: '호텔·관광', count: getFilterCount(allProfiles, 'service-field') },
+  { id: 'automotive', label: '자동차·정비', count: getFilterCount(allProfiles, 'automotive') },
+  { id: 'hidden', label: '제한 공개', count: getFilterCount(allProfiles, 'hidden') },
 ];
 
-const statCards = [
-  {
-    label: '노출 프로필',
-    value: String(visibleProfiles.length),
-    description: '직무 기준 공개',
-  },
-  {
-    label: '최근 제안',
-    value: String(recentOffers.length),
-    description: '최근 도착 기준',
-  },
-  {
-    label: '열람 가능',
-    value: 'ON',
-    description: '인증 기업 기준',
-  },
+const metrics = [
+  { value: '2', unit: '건', label: '제안 대기', sub: '오늘 도착' },
+  { value: '6', unit: '명', label: '노출 프로필', sub: '열람 가능' },
+  { value: '4', unit: '개', label: '최근 도착', sub: '오늘 기준' },
 ];
+
+const profileList = getBaseTalentProfiles()
+  .slice(0, 4)
+  .map((profile) => ({
+    id: profile.id,
+    name: profile.name,
+    role: profile.desiredRoleLabel,
+    status: profile.status,
+    timing: '오늘 등록',
+  }));
+
+const activityFeed = recentOffers.slice(0, 3).map((offer) => ({
+  id: `${offer.targetName}-${offer.offerRole}`,
+  role: offer.offerRole,
+  target: offer.targetName,
+  reason: offer.reason,
+  status: offer.status,
+  timing: offer.timing,
+  isNew: offer.timing === '방금 도착' || offer.timing === '22분 전',
+}));
 
 export function HomePage() {
   usePageTitle('메인');
@@ -118,35 +229,26 @@ export function HomePage() {
                 프로필 탐색
               </Link>
             </div>
-            <div className="home-trust-list" aria-label="핵심 신뢰 기준">
-              {trustPoints.map((point) => (
-                <Pill key={point}>{point}</Pill>
-              ))}
-            </div>
           </div>
 
           <div className="home-hero__panel surface-card">
             <div className="home-live-panel">
               <div className="home-live-panel__head">
                 <p className="home-status-card__label">실시간 제안</p>
-                <span className="signal-card__status">{highlightedOffer.status}</span>
+                <span className="signal-card__status">{heroAlert.status}</span>
               </div>
               <div className="home-live-panel__block">
-                <strong className="home-status-card__value">{highlightedOffer.targetName} 님 제안 도착</strong>
-                <p className="home-status-card__copy">{highlightedOffer.offerRole}</p>
+                <strong className="home-status-card__value">{heroAlert.targetName} 님 제안 도착</strong>
+                <p className="home-status-card__copy">{heroAlert.offerRole}</p>
               </div>
               <div className="home-live-panel__rows">
                 <div className="home-live-row">
-                  <span>제안 주체</span>
-                  <strong>{highlightedOffer.companyLabel}</strong>
-                </div>
-                <div className="home-live-row">
                   <span>판단 근거</span>
-                  <strong>{highlightedOffer.reason}</strong>
+                  <strong>{heroAlert.reason}</strong>
                 </div>
                 <div className="home-live-row">
                   <span>도착 시점</span>
-                  <strong>{highlightedOffer.timing}</strong>
+                  <strong>{heroAlert.timing}</strong>
                 </div>
               </div>
               <Link className="text-link" to={ROUTE_PATHS.proposals}>
@@ -160,15 +262,18 @@ export function HomePage() {
       <section className="home-section">
         <div className="container home-section__inner">
           <div className="home-section__head">
-            <p className="eyebrow">운영 현황</p>
-            <h2>지금 확인할 수 있는 운영 상태</h2>
+            <p className="eyebrow">현황</p>
+            <h2>프로필 노출 · 열람 가능</h2>
           </div>
           <div className="home-metrics-grid">
-            {statCards.map((card) => (
-              <article key={card.label} className="surface-card metric-card">
-                <p className="metric-card__label">{card.label}</p>
-                <strong className="metric-card__value">{card.value}</strong>
-                <p className="metric-card__copy">{card.description}</p>
+            {metrics.map((m) => (
+              <article key={m.label} className="metric-card">
+                <p className="metric-card__label">{m.label}</p>
+                <div className="metric-card__value">
+                  <strong>{m.value}</strong>
+                  <span>{m.unit}</span>
+                </div>
+                <p className="metric-card__copy">{m.sub}</p>
               </article>
             ))}
           </div>
@@ -178,21 +283,21 @@ export function HomePage() {
       <section className="home-section">
         <div className="container home-section__inner">
           <div className="home-section__head">
-            <p className="eyebrow">추천 조건</p>
-            <h2>지금 바로 들어가 볼 만한 탐색 묶음</h2>
+            <p className="eyebrow">카테고리</p>
+            <h2>조건별 탐색 묶음</h2>
           </div>
-          <div className="home-theme-grid">
-            {featuredThemes.map((theme) => (
-              <article key={theme.title} className="surface-card theme-card">
-                <p className="theme-card__label">{theme.label}</p>
-                <h3>{theme.title}</h3>
-                <p>{theme.description}</p>
-                <Link className="text-link" to={ROUTE_PATHS.talents}>
-                  관련 프로필 보기
-                </Link>
-              </article>
+          <nav className="home-category-pills">
+            {quickFilters.map((filter) => (
+              <Link
+                key={filter.id}
+                to={`${ROUTE_PATHS.talents}?filter=${filter.id}`}
+                className="home-category-pill"
+              >
+                <span className="home-category-pill__label">{filter.label}</span>
+                <span className="home-category-pill__count">{filter.count}</span>
+              </Link>
             ))}
-          </div>
+          </nav>
         </div>
       </section>
 
@@ -202,36 +307,21 @@ export function HomePage() {
             <p className="eyebrow">등록 프로필</p>
             <h2>최근 등록된 프로필</h2>
           </div>
-          <div className="home-profile-grid">
-            {visibleProfiles.map((profile) => (
-              <article key={profile.id} className="surface-card profile-card">
-                <div className="profile-card__head">
-                  <div className="profile-card__title-group">
-                    <p className="profile-card__name">{profile.title}</p>
-                    <h3>{profile.name}</h3>
-                  </div>
-                  <span className="signal-card__status">{profile.status}</span>
+          <ul className="profile-list">
+            {profileList.map((profile) => (
+              <li key={profile.id} className="profile-list-item">
+                <span className="signal-card__status">{profile.status}</span>
+                <div className="profile-list-item__info">
+                  <strong>{profile.name}</strong>
+                  <span>{profile.role}</span>
                 </div>
-                <div className="profile-card__meta">
-                  <span>{profile.desiredRole}</span>
-                  <span>{profile.career}</span>
-                  <span>{profile.condition}</span>
-                </div>
-                <p className="profile-card__highlight">{profile.intro}</p>
-                <div className="talent-card__chips">
-                  {profile.highlights.map((item) => (
-                    <Pill key={`${profile.id}-${item}`}>{item}</Pill>
-                  ))}
-                </div>
-                <div className="profile-card__footer">
-                  <span className="profile-card__visibility">{profile.visibility}</span>
-                  <Link className="text-link" to={ROUTE_PATHS.talents}>
-                    프로필 보기
-                  </Link>
-                </div>
-              </article>
+                <span className="profile-list-item__time">{profile.timing}</span>
+                <Link to={`${ROUTE_PATHS.talents}/${profile.id}`} className="text-link">
+                  프로필 보기
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -239,57 +329,26 @@ export function HomePage() {
         <div className="container home-section__inner">
           <div className="home-section__head">
             <p className="eyebrow">최근 제안</p>
-            <h2>최근 도착한 구원 제안</h2>
+            <Link to={ROUTE_PATHS.proposals} className="text-link">전체 보기</Link>
           </div>
-          <div className="home-feed-grid">
-            <article className="surface-card feed-card">
-              <div className="feed-card__head">
-                <h3>최근 제안</h3>
-                <Link className="text-link" to={ROUTE_PATHS.proposals}>
-                  제안함 보기
-                </Link>
-              </div>
-              <div className="feed-card__list">
-                {recentOffers.map((offer) => (
-                  <div key={`${offer.targetName}-${offer.offerRole}`} className="feed-row">
-                    <div className="feed-row__content">
-                      <strong>{offer.offerRole}</strong>
-                      <p>{offer.targetName} 님 대상</p>
-                      <p>{offer.reason}</p>
+          <ol className="timeline-list">
+              {activityFeed.map((item, index) => (
+                <li key={item.id} className={`timeline-item ${item.isNew ? 'timeline-item--new' : ''}`}>
+                  <div className="timeline-item__dot" />
+                  {index < activityFeed.length - 1 && <div className="timeline-item__line" />}
+                  <div className="timeline-item__content">
+                    <div className="timeline-item__head">
+                      <strong>{item.role}</strong>
+                      <span className="signal-card__status">{item.status}</span>
                     </div>
-                    <div className="feed-row__aside">
-                      <span className="signal-card__status">{offer.status}</span>
-                      <small>{offer.timing}</small>
-                    </div>
+                    <p className="timeline-item__meta">
+                      {item.target} · {item.reason}
+                    </p>
+                    <time className="timeline-item__time">{item.timing}</time>
                   </div>
-                ))}
-              </div>
-            </article>
-
-            <article className="surface-card feed-card">
-              <div className="feed-card__head">
-                <h3>열람 가능 프로필</h3>
-                <Link className="text-link" to={ROUTE_PATHS.talents}>
-                  목록 보기
-                </Link>
-              </div>
-              <div className="feed-card__list">
-                {visibleProfiles.slice(0, 4).map((profile) => (
-                    <div key={`${profile.id}-visible`} className="feed-row">
-                      <div className="feed-row__content">
-                        <strong>{profile.name}</strong>
-                        <p>{profile.desiredRole}</p>
-                        <p>{profile.intro}</p>
-                      </div>
-                    <div className="feed-row__aside">
-                      <span className="signal-card__status">{profile.visibility}</span>
-                      <small>{profile.condition}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </article>
-          </div>
+                </li>
+              ))}
+            </ol>
         </div>
       </section>
     </div>

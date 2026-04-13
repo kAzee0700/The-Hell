@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                 String            @id @default(uuid())
+  email              String            @unique
+  password           String
+  role               String
+  name               String?
+  
+  // Individual fields
+  phone              String?
+  postcode           String?
+  address            String?
+  detailAddress      String?
+  
+  // Profile (step 2 for individual)
+  desiredJob         String?
+  careerLevel        String?
+  employmentType     String?
+  workStyle          String?
+  introduction       String?
+  profileVisibility  String?
+  allowProposals     Boolean?
+  
+  // Company fields
+  companyName        String?
+  businessNumber     String?           @unique
+  department         String?
+  position           String?
+  
+  // Company verification
+  verificationStatus String            @default("pending")
+  
+  // Terms
+  termsAgree         Boolean           @default(false)
+  policyAgree        Boolean           @default(false)
+  marketingAgree     Boolean           @default(false)
+  
+  // Relations
+  viewedProfiles     ViewHistory[]     @relation("Viewer")
+  profileViewedBy    ViewHistory[]     @relation("Viewed")
+  
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
+
+model ViewHistory {
+  id              String   @id @default(uuid())
+  
+  // Who viewed (company)
+  viewerId       String
+  viewer          User     @relation("Viewer", fields: [viewerId], references: [id])
+  
+  // Whose profile was viewed (individual)
+  viewedId       String
+  viewed         User     @relation("Viewed", fields: [viewedId], references: [id])
+  
+  reason         String?
+  
+  createdAt      DateTime @default(now())
+}
