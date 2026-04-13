@@ -1,5 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AboutPage } from '../pages/AboutPage';
+import { AdminLayout } from '../layouts/AdminLayout';
+import { AdminUsersPage } from '../pages/AdminUsersPage';
+import { AdminCompaniesPage } from '../pages/AdminCompaniesPage';
 import { CompanyOffersPage } from '../pages/CompanyOffersPage';
 import { CompanyVerificationPage } from '../pages/CompanyVerificationPage';
 import { RootLayout } from '../layouts/RootLayout';
@@ -8,6 +11,12 @@ import { JobSeekerLayout } from '../layouts/JobSeekerLayout';
 import { CompanyGateLayout } from '../layouts/CompanyGateLayout';
 import { CompanyLayout } from '../layouts/CompanyLayout';
 import { HomePage } from '../pages/HomePage';
+import { LoginPage } from '../pages/LoginPage';
+import { SignupTypePage } from '../pages/SignupTypePage';
+import { SignupIndividualPage } from '../pages/SignupIndividualPage';
+import { SignupIndividualProfilePage } from '../pages/SignupIndividualProfilePage';
+import { SignupCompanyPage } from '../pages/SignupCompanyPage';
+import { SignupCompanySetupPage } from '../pages/SignupCompanySetupPage';
 import { JobSeekerProfilePage } from '../pages/JobSeekerProfilePage';
 import { JobSeekerProposalDetailPage } from '../pages/JobSeekerProposalDetailPage';
 import { JobSeekerProposalsPage } from '../pages/JobSeekerProposalsPage';
@@ -17,6 +26,8 @@ import { SafetyPage } from '../pages/SafetyPage';
 import { SavedTalentsPage } from '../pages/SavedTalentsPage';
 import { TalentDetailPage } from '../pages/TalentDetailPage';
 import { TalentListPage } from '../pages/TalentListPage';
+import { ViewHistoryPage } from '../pages/ViewHistoryPage';
+import { VisibilityPage } from '../pages/VisibilityPage';
 import { ROUTE_PATHS } from '../utils/routes';
 
 export const router = createBrowserRouter([
@@ -30,6 +41,30 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <HomePage />,
+          },
+          {
+            path: ROUTE_PATHS.login,
+            element: <LoginPage />,
+          },
+          {
+            path: ROUTE_PATHS.signup,
+            element: <SignupTypePage />,
+          },
+          {
+            path: ROUTE_PATHS.signupIndividual,
+            element: <SignupIndividualPage />,
+          },
+          {
+            path: ROUTE_PATHS.signupIndividualProfile,
+            element: <SignupIndividualProfilePage />,
+          },
+          {
+            path: ROUTE_PATHS.signupCompany,
+            element: <SignupCompanyPage />,
+          },
+          {
+            path: ROUTE_PATHS.signupCompanySetup,
+            element: <SignupCompanySetupPage />,
           },
           {
             path: ROUTE_PATHS.about,
@@ -49,12 +84,20 @@ export const router = createBrowserRouter([
             element: <JobSeekerProfilePage />,
           },
           {
+            path: ROUTE_PATHS.visibility,
+            element: <VisibilityPage />,
+          },
+          {
             path: ROUTE_PATHS.proposals,
             element: <JobSeekerProposalsPage />,
           },
           {
             path: ROUTE_PATHS.proposalDetail,
             element: <JobSeekerProposalDetailPage />,
+          },
+          {
+            path: ROUTE_PATHS.viewHistory,
+            element: <ViewHistoryPage />,
           },
         ],
       },
@@ -89,6 +132,23 @@ export const router = createBrowserRouter([
           {
             path: ROUTE_PATHS.offers,
             element: <CompanyOffersPage />,
+          },
+          {
+            path: ROUTE_PATHS.viewHistory,
+            element: <ViewHistoryPage />,
+          },
+        ],
+      },
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            path: ROUTE_PATHS.adminUsers,
+            element: <AdminUsersPage />,
+          },
+          {
+            path: ROUTE_PATHS.adminCompanies,
+            element: <AdminCompaniesPage />,
           },
         ],
       },

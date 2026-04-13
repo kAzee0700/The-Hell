@@ -1,8 +1,27 @@
-import { useSearchParams } from 'react-router-dom';
-import { getViewerAccess } from '../utils/access-levels';
+import { useAuth } from './useAuth';
+import { VIEWER_ACCESS } from '../utils/access-levels';
 
 export function useViewerAccess() {
-  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
 
-  return getViewerAccess(searchParams.get('viewer'));
+  if (!user) {
+    return VIEWER_ACCESS.public;
+  }
+
+  if (user.role === 'admin') {
+    return VIEWER_ACCESS.admin;
+  }
+
+  if (user.role === 'individual') {
+    return VIEWER_ACCESS.jobSeeker;
+  }
+
+  if (user.role === 'company') {
+    if (user.verificationStatus === 'verified') {
+      return VIEWER_ACCESS.companyVerified;
+    }
+    return VIEWER_ACCESS.companyPending;
+  }
+
+  return VIEWER_ACCESS.public;
 }
